@@ -68,6 +68,139 @@
             </aside>
           </section>
         </section>
+        <section>
+          <section>
+            <h1 class="r-fit-text">Why Server Components?</h1>
+          </section>
+          <section>
+            <p>
+              Server Components allow developers to better
+              <strong>leverage server infrastructure</strong>. For example, you
+              can move data fetching to the server, closer to your database, and
+              keep large dependencies that previously would impact the client
+              JavaScript bundle size on the server, leading to improved
+              performance.
+            </p>
+          </section>
+          <section>
+            <p>
+              The initial page load is faster, and the client-side JavaScript
+              bundle size is reduced.
+            </p>
+          </section>
+          <section>
+            <p>
+              Additional JavaScript is only added as client-side interactivity
+              is used in your application through Client Components.
+            </p>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1 class="r-fit-text">Client components</h1>
+          </section>
+          <section>
+            <p>
+              Client Components enable you to add client-side interactivity to
+              your application.
+            </p>
+          </section>
+          <section>
+            <p>
+              The <strong>use client</strong> directive is a convention to
+              declare a boundary between a Server and Client Component module
+              graph.
+            </p>
+            <pre><code data-line-numbers="1"><script type="text/template">'use client'
+
+import { useState } from 'react'
+
+export default function Counter() {
+	const [count, setCount] = useState(0)
+	
+	return (
+		<div>
+		<p>You clicked {count} times</p>
+		<button onClick={setCount(prev => prev + 1)}>
+			Click me
+		</button>
+		</div>
+	)
+}
+			</script></code></pre>
+          </section>
+          <section>
+            <img
+              class="r-stretch"
+              data-src="dist/assets/use-client-directive.avif"
+            />
+            <aside class="notes">
+              "use client" sits between server-only and client code. It's placed
+              at the top of a file, above imports, to define the cut-off point
+              where it crosses the boundary from the server-only to the client
+              part. Once "use client" is defined in a file, all other modules
+              imported into it, including child components, are considered part
+              of the client bundle. Since Server Components are the default, all
+              components are part of the Server Component module graph unless
+              defined or imported in a module that starts with the "use client"
+              directive.
+            </aside>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1 class="r-fit-text">
+              When to use Server and Client Components?
+            </h1>
+          </section>
+          <section>
+            <img data-src="dist/assets/when-to-use.png" />
+            <figcaption style="font-size: small">
+              Fig.1 -
+              <a
+                href="https://nextjs.org/docs/getting-started/react-essentials#when-to-use-server-and-client-components"
+                >Comparatives.</a
+              >
+            </figcaption>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1 class="r-fit-text">Patterns</h1>
+          </section>
+          <section>
+            <h2 class="r-fit-text">Moving Client Components to the Leaves</h2>
+            <pre><code data-line-numbers><script type="text/template">// SearchBar is a Client Component
+import SearchBar from './searchbar'
+// Logo is a Server Component
+import Logo from './logo'
+	
+// Layout is a Server Component by default
+export default function Layout({ children }: { children: React.ReactNode }) {
+	return (
+	<>
+		<nav>
+		<Logo />
+		<SearchBar />
+		</nav>
+		<main>{children}</main>
+	</>
+	)
+}
+			  </script></code></pre>
+            <aside class="notes">
+              To improve the performance of your application, we recommend
+              moving Client Components to the leaves of your component tree
+              where possible. For example, you may have a Layout that has static
+              elements (e.g. logo, links, etc) and an interactive search bar
+              that uses state. Instead of making the whole layout a Client
+              Component, move the interactive logic to a Client Component (e.g.
+              <SearchBar />) and keep your layout as a Server Component. This
+              means you don't have to send all the component Javascript of the
+              layout to the client.
+            </aside>
+          </section>
+        </section>
       </div>
     </div>
 
