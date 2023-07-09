@@ -42,7 +42,7 @@
           data-background-image="dist/assets/presentation/background2.png"
         >
           <section>
-            <h1 class="r-fit-text">Introduction</h1>
+            <h3>Introduction</h3>
           </section>
           <section>
             <p>
@@ -58,7 +58,7 @@
           data-background-image="dist/assets/presentation/background2.png"
         >
           <section>
-            <h1 class="r-fit-text">Thinking in Server Components</h1>
+            <h3>Thinking in Server Components</h3>
           </section>
           <section>
             <p>
@@ -69,9 +69,10 @@
           <section>
             <p>
               Instead of React rendering your whole application client-side
-              (such as in the case of Single-Page Applications), React now gives
-              you the flexibility to choose where to render your components
-              based on their purpose.
+              (such as in the case of
+              <strong>Single-Page Applications</strong>), React now gives you
+              the flexibility to choose where to render your components based on
+              their purpose.
             </p>
           </section>
           <section>
@@ -88,7 +89,7 @@
           data-background-image="dist/assets/presentation/background2.png"
         >
           <section>
-            <h1 class="r-fit-text">Why Server Components?</h1>
+            <h3>Why Server Components?</h3>
           </section>
           <section>
             <p>
@@ -117,7 +118,7 @@
           data-background-image="dist/assets/presentation/background2.png"
         >
           <section>
-            <h1 class="r-fit-text">Client components</h1>
+            <h3>Client components</h3>
           </section>
           <section>
             <p>
@@ -145,8 +146,7 @@ export default function Counter() {
 			Click me
 		</button>
 		</div>
-	)
-}
+)}
 			</script></code></pre>
           </section>
           <section>
@@ -171,9 +171,7 @@ export default function Counter() {
           data-background-image="dist/assets/presentation/background2.png"
         >
           <section>
-            <h1 class="r-fit-text">
-              When to use Server and Client Components?
-            </h1>
+            <h3>When to use Server and Client Components?</h3>
           </section>
           <section>
             <img data-src="dist/assets/when-to-use.png" />
@@ -190,17 +188,16 @@ export default function Counter() {
           data-background-image="dist/assets/presentation/background2.png"
         >
           <section>
-            <h1 class="r-fit-text">Patterns</h1>
+            <h3>Patterns</h3>
           </section>
           <section>
-            <h2 class="r-fit-text">Moving Client Components to the Leaves</h2>
+            <h4>Moving Client Components to the Leaves</h4>
             <pre><code data-line-numbers><script type="text/template">// SearchBar is a Client Component
 import SearchBar from './searchbar'
 // Logo is a Server Component
 import Logo from './logo'
-	
 // Layout is a Server Component by default
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }) {
 	return (
 	<>
 		<nav>
@@ -209,8 +206,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 		</nav>
 		<main>{children}</main>
 	</>
-	)
-}
+)}
 			  </script></code></pre>
             <aside class="notes">
               To improve the performance of your application, we recommend
@@ -219,17 +215,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               elements (e.g. logo, links, etc) and an interactive search bar
               that uses state. Instead of making the whole layout a Client
               Component, move the interactive logic to a Client Component (e.g.
-              <SearchBar />) and keep your layout as a Server Component. This
-              means you don't have to send all the component Javascript of the
-              layout to the client.
+              SearchBar) and keep your layout as a Server Component. This means
+              you don't have to send all the component Javascript of the layout
+              to the client.
             </aside>
           </section>
           <section>
-            <h2 class="r-fit-text">Composing Client and Server Components</h2>
+            <h4>Composing Client and Server Components</h4>
             <ul class="r-stack">
               <li class="fragment fade-out" data-fragment-index="0">
-                On the server, React renders all Server Components before
-                sending the result to the client.
+                On the <strong>server</strong>, React renders all Server
+                Components before sending the result to the client.
                 <ul>
                   <li>
                     This includes Server Components nested inside Client
@@ -241,9 +237,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </ul>
               </li>
               <li class="fragment current-visible" data-fragment-index="0">
-                On the client, React renders Client Components and slots in the
-                rendered result of Server Components, merging the work done on
-                the server and client.
+                On the <strong>client</strong>, React renders Client Components
+                and slots in the rendered result of Server Components, merging
+                the work done on the server and client.
                 <ul>
                   <li>
                     If any Server Components are nested inside a Client
@@ -255,49 +251,43 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </ul>
           </section>
           <section>
-            <h2 class="r-fit-text" data-id="title">
+            <h4 data-id="title">
               Nesting Server Components inside Client Components
-            </h2>
+            </h4>
           </section>
           <section data-auto-animate>
-            <h2 class="r-fit-text" style="color: red" data-id="title">
+            <h4 style="color: red" data-id="title">
               Nesting Server Components inside Client Components
-            </h2>
+            </h4>
             <p>Unsupported Pattern</p>
           </section>
           <section>
             <pre>
-				<code data-line-numbers="5, 18">
-					<script type="text/template">'use client'
- 
-// This pattern will **not** work!
-// You cannot import a Server Component into a Client Component.
-import ExampleServerComponent from './example-server-component'
-	
-export default function ExampleClientComponent({
-	children,
-}: {
-	children: React.ReactNode
-}) {
+				<code data-line-numbers="4, 12">
+					<script type="text/template">'use client' 
+// This pattern will **not** work! You cannot import a 
+// Server Component into a Client Component.
+import ExampleServerComponent from './server-component'
+export default function ExampleClientComponent({children}) {
 	const [count, setCount] = useState(0)
-	
 	return (
 	<>
-		<button onClick={() => setCount(count + 1)}>{count}</button>
-	
+		<button onClick={setCount(prev => prev + 1)}>
+			{count}
+		</button>
 		<ExampleServerComponent />
 	</>
-	)
-}</script>
+	)}
+</script>
 				</code>
 			</pre>
           </section>
           <section data-auto-animate>
-            <h2 class="r-fit-text" data-id="title">
+            <h4 data-id="title">
               Nesting Server Components inside Client Components
-            </h2>
+            </h4>
             <p>Recommended Pattern:</p>
-            <p>Passing Server Components to Client Components as Props</p>
+            <b>Passing Server Components to Client Components as Props</b>
             <aside class="notes">
               The Server Component will be rendered on the server, and when the
               Client Component is rendered on the client, the "slot" will be
@@ -305,26 +295,22 @@ export default function ExampleClientComponent({
             </aside>
           </section>
           <section>
-            <pre><code data-line-numbers="6,16">
+            <pre><code data-line-numbers="5,13">
 				<script type="text/template">'use client'
  
 import { useState } from 'react'
 	
-export default function ExampleClientComponent({
-	children,
-}: {
-	children: React.ReactNode
-}) {
+export default function ExampleClientComponent({children}) {
 	const [count, setCount] = useState(0)
-	
 	return (
 	<>
-		<button onClick={() => setCount(count + 1)}>{count}</button>
+		<button onClick={setCount(prev => prev + 1)}>
+			{count}
+		</button>
 	
 		{children}
 	</>
-	)
-}</script>
+)}</script>
 			</code></pre>
             <aside class="notes">
               A common pattern is to use the React children prop to create the
@@ -337,14 +323,13 @@ export default function ExampleClientComponent({
           </section>
           <section>
             <pre>
-				<code data-line-numbers="11">
+				<code data-line-numbers="10">
 					<script type="text/template">// This pattern works:
 // You can pass a Server Component as a child or prop of a
 // Client Component.
-import ExampleClientComponent from './example-client-component'
-import ExampleServerComponent from './example-server-component'
-	
-// Pages in Next.js are Server Components by default
+import ExampleClientComponent from './client-component'
+import ExampleServerComponent from './server-component'
+
 export default function Page() {
 	return (
 	<ExampleClientComponent>
