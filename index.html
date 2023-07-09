@@ -200,6 +200,146 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               layout to the client.
             </aside>
           </section>
+          <section>
+            <h2 class="r-fit-text">Composing Client and Server Components</h2>
+            <ul class="r-stack">
+              <li class="fragment fade-out" data-fragment-index="0">
+                On the server, React renders all Server Components before
+                sending the result to the client.
+                <ul>
+                  <li>
+                    This includes Server Components nested inside Client
+                    Components.
+                  </li>
+                  <li>
+                    Client Components encountered during this stage are skipped.
+                  </li>
+                </ul>
+              </li>
+              <li class="fragment current-visible" data-fragment-index="0">
+                On the client, React renders Client Components and slots in the
+                rendered result of Server Components, merging the work done on
+                the server and client.
+                <ul>
+                  <li>
+                    If any Server Components are nested inside a Client
+                    Component, their rendered content will be placed correctly
+                    within the Client Component.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2 class="r-fit-text" data-id="title">
+              Nesting Server Components inside Client Components
+            </h2>
+          </section>
+          <section data-auto-animate>
+            <h2 class="r-fit-text" style="color: red" data-id="title">
+              Nesting Server Components inside Client Components
+            </h2>
+            <p>Unsupported Pattern</p>
+          </section>
+          <section>
+            <pre>
+				<code data-line-numbers="5, 18">
+					<script type="text/template">'use client'
+ 
+// This pattern will **not** work!
+// You cannot import a Server Component into a Client Component.
+import ExampleServerComponent from './example-server-component'
+	
+export default function ExampleClientComponent({
+	children,
+}: {
+	children: React.ReactNode
+}) {
+	const [count, setCount] = useState(0)
+	
+	return (
+	<>
+		<button onClick={() => setCount(count + 1)}>{count}</button>
+	
+		<ExampleServerComponent />
+	</>
+	)
+}</script>
+				</code>
+			</pre>
+          </section>
+          <section data-auto-animate>
+            <h2 class="r-fit-text" data-id="title">
+              Nesting Server Components inside Client Components
+            </h2>
+            <p>Recommended Pattern:</p>
+            <p>Passing Server Components to Client Components as Props</p>
+            <aside class="notes">
+              The Server Component will be rendered on the server, and when the
+              Client Component is rendered on the client, the "slot" will be
+              filled in with the rendered result of the Server Component.
+            </aside>
+          </section>
+          <section>
+            <pre><code data-line-numbers="6,16">
+				<script type="text/template">'use client'
+ 
+import { useState } from 'react'
+	
+export default function ExampleClientComponent({
+	children,
+}: {
+	children: React.ReactNode
+}) {
+	const [count, setCount] = useState(0)
+	
+	return (
+	<>
+		<button onClick={() => setCount(count + 1)}>{count}</button>
+	
+		{children}
+	</>
+	)
+}</script>
+			</code></pre>
+            <aside class="notes">
+              A common pattern is to use the React children prop to create the
+              "slot". We can refactor ExampleClientComponent to accept a generic
+              children prop and move the import and explicit nesting of
+              ExampleClientComponent up to a parent component. The only
+              responsibility ExampleClientComponent has is to decide where
+              whatever children will eventually be should be placed.
+            </aside>
+          </section>
+          <section>
+            <pre>
+				<code data-line-numbers="11">
+					<script type="text/template">// This pattern works:
+// You can pass a Server Component as a child or prop of a
+// Client Component.
+import ExampleClientComponent from './example-client-component'
+import ExampleServerComponent from './example-server-component'
+	
+// Pages in Next.js are Server Components by default
+export default function Page() {
+	return (
+	<ExampleClientComponent>
+		<ExampleServerComponent />
+	</ExampleClientComponent>
+	)
+}</script>
+				</code>
+			</pre>
+            <aside class="notes">
+              In a parent Server Component, you can import both the
+              ExampleClientComponent and ExampleServerComponent and pass
+              ExampleServerComponent as a child of ExampleClientComponent. With
+              this approach, the rendering of ExampleClientComponent and
+              ExampleServerComponent are decoupled and can be rendered
+              independently - aligning with Server Components, which are
+              rendered on the server before Client Components.
+            </aside>
+          </section>
         </section>
       </div>
     </div>
